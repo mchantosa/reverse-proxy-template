@@ -1,0 +1,50 @@
+version: '3'  #file format version
+
+services:
+  nginx:  #Nginx service
+    image: nginx:alpine #image
+    ports:
+      - "80:80" #maps port 80 on the host to port 80 in the container
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro #mounts the local nginx.conf
+    depends_on: #ensures nginx starts after web0, web1,...
+      - web0
+      - web1  
+      - web2
+      - web3
+  
+  web0:
+    image: node:alpine
+    command: sh -c 'npx -y serve -p 8000'
+    volumes:  #Think container's hard drive
+      - ./site0:/usr/app/site0  #mounts the local directory to the container
+    working_dir: /usr/app/site0  #sets the working directory inside container
+    ports:
+      - "8000:80"
+
+  web1:
+    image: node:alpine
+    command: sh -c 'npx -y serve -p 8001'
+    volumes:  
+      - ./site1:/usr/app/site1  
+    working_dir: /usr/app/site1 
+    ports:
+      - "8001:80"
+
+  web2:
+    image: node:alpine
+    command: sh -c 'npx -y serve -p 8002'
+    volumes:
+      - ./site2:/usr/app/site2
+    working_dir: /usr/app/site2
+    ports:
+      - "8002:80"
+
+  web3:
+    image: node:alpine
+    command: sh -c 'npx -y serve -p 8003'
+    volumes:
+      - ./site3:/usr/app/site3
+    working_dir: /usr/app/site3
+    ports:
+      - "8003:80"
